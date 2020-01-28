@@ -3,58 +3,67 @@ class Calculate {
         this.array = array;
     }
 
-    Max() {
-        let len = this.array.length, max = -Infinity;
-        while (len--) {
-            if (this.array[len] > max) {
-                max = this.array[len];
-            }
+    max() {
+        let max = this.array[0];
+        let len = this.array.length;
+
+        for (let i = 1; i < len; i++) {
+            if (this.array[i] > max) max = this.array[i];
         }
         return max;
     }
 
-    Min() {
-        let len = this.array.length, min = Infinity;
-        while (len--) {
-            if (this.array[len] < min) {
-                min = this.array[len];
-            }
+    min() {
+        let min = this.array[0];
+        let len = this.array.length;
+
+        for (let i = 1; i < len; i++) {
+            if (this.array[i] < min) min = this.array[i];
         }
         return min;
     }
 
-    indicatedCount() {
-        const value = document.getElementById("indicatedValue").value;
+    valueToCompare() {
+        const value = document.getElementById("valueToCompare").value;
+        let equal = 0;
+        let smaller = 0;
+        let bigger = 0;
+
+        for (let i = 0; i <= this.array.length; i++) {
+            if (this.array[i] == value) equal++;
+            if (this.array[i] < value) smaller++;
+            if (this.array[i] > value) bigger++;
+        }
+
         return {
-            equal: this.array.reduce((count, x) => (x == value ? count + 1 : count), 0),
-            smaller: this.array.reduce((count, x) => (x < value ? count + 1 : count), 0),
-            bigger: this.array.reduce((count, x) => (x > value ? count + 1 : count), 0)
+            equal, smaller, bigger
         }
     }
 
-    Average() {
+    average() {
         return this.array.reduce((sum, accumulator) => sum + accumulator) / this.array.length;
     }
 
-    LowTemperatures() {
+    lowTemperatures() {
         return this.array.reduce((count, x) => (x < 0 ? count + 1 : count), 0);
     }
-
-    print(text, result) {
-        document.getElementById("results").innerHTML += `${text} :${result} <br>`;
-    }
 }
+
+const print = (text, result) => {
+    document.getElementById("results").innerHTML += `${text} :${result} <br>`;
+};
 
 document.getElementById("calculate").addEventListener("click", () => {
     let temps = document.getElementById("temperatureHolder").value.split(" ").map(Number);
     const results = new Calculate(temps);
-    results.print("Lowest temperature:", results.Min());
-    results.print("Highest temperature:", results.Max());
-    results.print("Decalajul:", results.Max() - results.Min());
-    results.print("Average is:", results.Average());
-    results.print("Low temperatures are", results.LowTemperatures());
-    results.print("Equal temperatures with indicated:", results.indicatedCount().equal);
-    results.print("Smaller temperatures with indicated:", results.indicatedCount().smaller);
-    results.print("Bigger temperatures with indicated:", results.indicatedCount().bigger);
+
+    print("Lowest temperature:", results.min());
+    print("Highest temperature:", results.max());
+    print("Decalajul:", results.max() - results.min());
+    print("Average is:", results.average());
+    print("Low temperatures are", results.lowTemperatures());
+    print("Equal temperatures with indicated:", results.valueToCompare().equal);
+    print("Smaller temperatures with indicated:", results.valueToCompare().smaller);
+    print("Bigger temperatures with indicated:", results.valueToCompare().bigger);
 });
 
