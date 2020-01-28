@@ -49,8 +49,8 @@ class Calculate {
     }
 }
 
-const print = (text, result) => {
-    document.getElementById("results").innerHTML += `${text} :${result} <br>`;
+const print = (label, number) => {
+    document.getElementById("results").innerHTML += `${label} :${number} <br>`;
 };
 
 document.getElementById("calculate").addEventListener("click", () => {
