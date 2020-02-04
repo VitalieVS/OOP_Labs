@@ -53,9 +53,9 @@ class ArrayModify {
     }
 
     checkRoute(value) {
-        return this.array.filter(item => item == value).length;
+        return this.array.filter(item => item === value).length;
       }
-      
+
       print(text, result) {
         document.getElementById("results").innerHTML += `${text} ${result} <br>`;
     }

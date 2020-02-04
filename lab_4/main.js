@@ -1,6 +1,7 @@
 class ArrayRead {
     constructor(array) {
         this.array = array;
+        console.log(array);
     }
 
     MinMax() {
@@ -30,7 +31,7 @@ class ArrayRead {
     changeRow() {
         let row;
         row = this.array[getChange().first];
-        this.array[getChange().first] = this.array[getChange().second];
+        this.array[getChange().first] = this.array[getChange().second].slice();
         this.array[getChange().second] = row;
         return this.array;
     }
@@ -64,8 +65,7 @@ document.getElementById("calculateMatrix_but").addEventListener("click", () => {
     result.print("I position", result.MinMax().minPosI);
     result.print("J position", result.MinMax().minPosJ);
     result.print('Changed rows:', "");
-    result.arrayShow();
-   // result.arrayShow();
+    console.log(result.changeRow());
 });
 
 const getRowColumn = () => {

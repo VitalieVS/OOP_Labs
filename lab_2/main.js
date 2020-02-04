@@ -73,7 +73,6 @@ class Perfect {
       this.number = number;
   }
 
-
 }
 
 let result = new Perfect();
