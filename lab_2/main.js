@@ -1,79 +1,108 @@
 class Perfect {
-    constructor(number) {
-        this.number = number;
+  constructor(number, valueFrom, valueTo) {
+    this.number = number;
+    this.valueFrom = valueFrom;
+    this.valueTo = valueTo;
+  }
+
+  isPerfect() {
+    if (this.number === 0) {
+      return false;
     }
+    let dividersSum = 0;
 
-    isPerfect() {
-        if (this.number === 0) {
-            return false;
-        }
-
-        let dividersSum = 0;
-
-        for (let i = 1; i <= this.number / 2; i++) {
-            if (this.number % i === 0) {
-                dividersSum += i;
-            }
-        }
-        return dividersSum == this.number;
+    for (let i = 1; i <= this.number / 2; i++) {
+      if (this.number % i === 0) {
+        dividersSum += i;
+      }
     }
-}
+    return dividersSum === this.number;
+  }
 
-document.getElementById("check_number_but").addEventListener("click", () => {
-    let number = document.getElementById("number").value;
-    const result = new Perfect(number);
-    result.isPerfect() ? document.getElementById('number_is_perfect_result').style.display = 'block' : document.getElementById('number_not_perfect_result').style.display = 'block';
-});
-
-document.getElementById("interval_but").addEventListener("click", () => {
-    const value_from = document.getElementById("value_from").value;
-    const value_to = document.getElementById("value_to").value;
-    const perfect = document.getElementById("perfect_from_to");
-    const notPerfect = document.getElementById("not_perfect_from_to");
-    perfect.style.display = "block";
-    notPerfect.style.display = "block";
+  valueFromTo() {
     let perfectNumbers = [];
-    let notPerfectNumbers = [];
 
-    for (let i = value_from; i <= value_to; i++) {
-        let result = new Perfect(i);
-        result.isPerfect() ? perfectNumbers.push(i) : notPerfectNumbers.push(i);
+    for (let i = this.valueFrom; i <= this.valueTo; i++) {
+      this.number = i;
+      if (this.isPerfect()) {
+        perfectNumbers.push(i)
+      }
     }
+    return perfectNumbers;
+  }
 
-    perfect.innerHTML = "Perfect Numbers" + perfectNumbers;
-    notPerfect.innerHTML = "Not perfect Numbers" + notPerfectNumbers;
-});
+  MaxPerfectNumber() {
+    let validCount = 0;
+    let count = 1;
+    let result;
+    let i = 1e9;
 
-document.getElementById("first_numbers_but").addEventListener("click", () => {
-    const count = Number(document.getElementById("first_numbers_count").value);
-    const first_numbers = document.getElementById("first_numbers_result");
+    while (validCount !== Number(count)) {
+      this.number = i;
+      if (this.isPerfect()) {
+        result = "Max number:" + i;
+        validCount++;
+      }
+      i--;
+    }
+    return result;
+  }
+
+  firstPerfectNumbers(count) {
     let validCount = 0;
     let array = [];
     let i = 0;
 
     while (validCount !== count) {
-        let result = new Perfect(i);
-        if (result.isPerfect()) {
-            array.push(i);
-            validCount++;
-        }
-        i++
+      this.number = i;
+      if (this.isPerfect()) {
+        array.push(i);
+        validCount++;
+      }
+      i++
     }
-    first_numbers.innerHTML = array;
+    return array;
+  }
+
+  setValueFromValueTo(valueFrom, valueTo){
+      this.valueFrom = valueFrom;
+      this.valueTo = valueTo;
+  }
+
+  setNumber(number){
+      this.number = number;
+  }
+
+
+}
+
+let result = new Perfect();
+
+document.getElementById("check_number_but").addEventListener("click", () => {
+  let number = +document.getElementById("number").value;
+  const numberIsPerfect = document.getElementById('number_is_perfect_result');
+  result.setNumber(number);
+  numberIsPerfect.innerHTML = result.isPerfect() ? 'Is perfect!' : 'Not perfect!';
+});
+
+document.getElementById("interval_but").addEventListener("click", () => {
+  const perfect = document.getElementById("perfect_from_to");
+  const valueFrom = +document.getElementById("value_from").value;
+  const valueTo = +document.getElementById("value_to").value;
+
+  perfect.style.display = "block";
+  result.setValueFromValueTo(valueFrom, valueTo);
+  perfect.innerHTML = "Perfect Numbers:" + result.valueFromTo();
+});
+
+document.getElementById("first_numbers_but").addEventListener("click", () => {
+  const firstNumbers = document.getElementById("first_numbers_result");
+  const count = Number(document.getElementById("first_numbers_count").value);
+
+  firstNumbers.innerHTML = result.firstPerfectNumbers(count).join(" ");
 });
 
 document.getElementById("max_perfect_number_but").addEventListener("click", () => {
-    const writeResult = document.getElementById("max_perfect_number_result");
-    let validCount = 0;
-    let count = 1;
-    let i = Infinity;
-
-    while (validCount !== Number(count)) {
-        let result = new Perfect(i);
-        if (result.isPerfect()) {
-            writeResult.innerHTML = "Max number:" + i;
-            validCount++;
-        }
-        i--;
-    }
+  const writeResult = document.getElementById("max_perfect_number_result");
+  writeResult.innerHTML = result.MaxPerfectNumber();
 });
