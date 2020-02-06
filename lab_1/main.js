@@ -1,6 +1,7 @@
 class Calculate {
   constructor(array) {
     this.array = array;
+    this.value = +document.getElementById("valueToCompare").value;
   }
 
   maxMin() {
@@ -15,23 +16,24 @@ class Calculate {
         min = item;
       }
     }
-    return {min, max};
+    return {
+      min, max
+    };
   }
 
   valueToCompare() {
-    const valueToCompare = document.getElementById("valueToCompare").value;
     let equal = 0;
     let smaller = 0;
     let bigger = 0;
 
-      for (const item of this.array) {
-      if (item === valueToCompare) {
+    for (const item of this.array) {
+      if (item === this.value) {
         equal++;
       }
-      if (item < valueToCompare) {
+      if (item < this.value) {
         smaller++;
       }
-      if (item > valueToCompare) {
+      if (item > this.value) {
         bigger++;
       }
     }
@@ -45,34 +47,40 @@ class Calculate {
     return this.array.reduce((sum, accumulator) => sum + accumulator) / this.array.length;
   }
 
-  lowTemperatures() {
-    return this.array.filter(item => item < 0).length
+  checkRoute(){
+    console.log(this.checkNumber);
+    return this.array.filter(item => item === this.checkNumber).length;
+  }
+
+  setRoute(){
+    this.checkNumber = +document.getElementById("checkRouteHolder").value;
   }
 }
 
-const init = () =>{
+const init = () => {
   addListeners();
 };
 
 const resultElement = document.getElementById("results");
 
 const print = (label, number) => {
-  resultElement.innerHTML += `${label} :${number} <br>`;
+  resultElement.innerHTML += `${label} ${number} <br>`;
 };
 
 const addListeners = () =>{
   document.getElementById("calculate").addEventListener("click", () => {
-    let temps = document.getElementById("temperatureHolder").value.split(" ").map(Number);
-    const results = new Calculate(temps);
+    let hours = document.getElementById("hoursHolder").value.split(" ").map(Number);
+    const results = new Calculate(hours);
+    results.setRoute();
 
-    print("Lowest temperature:", results.maxMin().min);
-    print("Highest temperature:", results.maxMin().max);
+    print("Lowest value:", results.maxMin().min);
+    print("Highest value:", results.maxMin().max);
     print("Decalajul:", results.maxMin().max - results.maxMin().min);
     print("Average is:", results.average());
-    print("Low temperatures are", results.lowTemperatures());
-    print("Equal temperatures with indicated:", results.valueToCompare().equal);
-    print("Smaller temperatures with indicated:", results.valueToCompare().smaller);
-    print("Bigger temperatures with indicated:", results.valueToCompare().bigger);
+    print("Smaller than:", results.valueToCompare().smaller);
+    print("Equal:", results.valueToCompare().equal);
+    print("Bigger than:", results.valueToCompare().bigger);
+    print("On Route:", results.checkRoute());
   });
 };
 
